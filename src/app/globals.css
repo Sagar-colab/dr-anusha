@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm sanctuary palette */
+  --color-cream: #f4ece0;
+  --color-warm: #ebdfc9;
+  --color-terracotta: #b26b52;
+  --color-sage: #7a8b7e;
+  --color-amber: #d9a674;
+  --color-cocoa: #3a2e26;
+  --color-deep: #1f1612;
+  --color-burnt: #7a3826;
+
+  --font-display: var(--font-fraunces), serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  background: radial-gradient(ellipse at top, #f4ece0 0%, #ebdfc9 45%, #dcc9ad 100%);
+  background-attachment: fixed;
+  color: var(--color-cocoa);
+  font-family: var(--font-body);
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Animations used across the app */
+@keyframes haloPulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes shimmerCue {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes msgRise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatDot {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Soft scrollbar */
+.scrollbar-soft::-webkit-scrollbar { width: 6px; }
+.scrollbar-soft::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-soft::-webkit-scrollbar-thumb { background: rgba(122,56,38,0.2); border-radius: 999px; }
+
+/* Subtle paper grain */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
