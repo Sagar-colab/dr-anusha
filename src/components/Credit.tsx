@@ -11,7 +11,7 @@ export default function Credit() {
         letterSpacing: '0.08em',
       }}
     >
-      Created by Sagar U
+      Created by sagar 🩷 🧸
     </p>
   );
 }
