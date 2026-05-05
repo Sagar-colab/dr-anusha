@@ -44,6 +44,11 @@ html, body {
   50% { transform: translateY(-6px); opacity: 1; }
 }
 
+@keyframes ecgDrift {
+  0% { transform: translateX(-100px); }
+  100% { transform: translateX(280px); }
+}
+
 /* Soft scrollbar */
 .scrollbar-soft::-webkit-scrollbar { width: 6px; }
 .scrollbar-soft::-webkit-scrollbar-track { background: transparent; }

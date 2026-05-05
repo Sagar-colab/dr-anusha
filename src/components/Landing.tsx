@@ -55,39 +55,69 @@ export default function Landing() {
         }}
       />
 
-      {/* Pulsing dot */}
       <div
         className="relative z-10 mb-12 flex items-center justify-center"
-        style={{ width: 64, height: 64 }}
+        style={{ width: 280, height: 60 }}
       >
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 64,
-            height: 64,
-            background: 'rgba(122,139,126,0.1)',
-            animation: 'haloPulse 4s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 36,
-            height: 36,
-            background: 'rgba(178,107,82,0.14)',
-            animation: 'haloPulse 4s ease-in-out infinite 0.6s',
-          }}
-        />
-        <div
-          className="rounded-full"
-          style={{
-            width: 14,
-            height: 14,
-            background: '#7a8b7e',
-            boxShadow: '0 0 14px rgba(122,139,126,0.5)',
-            animation: 'shimmerCue 3s ease-in-out infinite',
-          }}
-        />
+        <svg
+          viewBox="0 0 280 60"
+          width="280"
+          height="60"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ overflow: 'visible' }}
+        >
+          <defs>
+            <linearGradient id="ecgFade" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="var(--color-terracotta)" stopOpacity="0" />
+              <stop offset="50%" stopColor="var(--color-terracotta)" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="var(--color-terracotta)" stopOpacity="0" />
+            </linearGradient>
+            <filter id="ecgGlow" x="-20%" y="-50%" width="140%" height="200%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* Faint baseline */}
+          <line
+            x1="0"
+            y1="30"
+            x2="280"
+            y2="30"
+            stroke="var(--color-sage)"
+            strokeOpacity="0.25"
+            strokeWidth="1"
+          />
+
+          {/* Single ECG waveform — drifts across the line */}
+          <g style={{ animation: 'ecgDrift 5s linear infinite' }}>
+            <path
+              d="M -80 30
+                 L 0 30
+                 L 8 30
+                 L 12 26
+                 L 16 30
+                 L 22 30
+                 L 28 10
+                 L 34 50
+                 L 38 22
+                 L 44 30
+                 L 52 30
+                 L 56 28
+                 L 60 30
+                 L 360 30"
+              fill="none"
+              stroke="url(#ecgFade)"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              filter="url(#ecgGlow)"
+            />
+          </g>
+        </svg>
       </div>
 
       {/* Single sentence — the hero */}
