@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Send, Wind } from 'lucide-react';
 import BreathingCompanion from './BreathingCompanion';
+import Credit from './Credit';
 import { detectMood, shouldOfferBreathing } from '@/lib/mood';
 import type { Message, Mood, IntakeData } from '@/types/chat';
 import { useRouter } from 'next/navigation';
@@ -556,6 +557,7 @@ export default function Chat() {
       </div>
 
       {showBreathing && <BreathingCompanion onClose={() => setShowBreathing(false)} />}
+      <Credit />
     </div>
   );
 }
