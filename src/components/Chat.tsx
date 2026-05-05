@@ -4,7 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { Send, Wind } from 'lucide-react';
 import BreathingCompanion from './BreathingCompanion';
 import { detectMood, shouldOfferBreathing } from '@/lib/mood';
-import type { Message, Mood } from '@/types/chat';
+import type { Message, Mood, IntakeData } from '@/types/chat';
+import { useRouter } from 'next/navigation';
+import { loadIntake, clearIntake } from '@/lib/intake-storage';
 
 const STARTER_PROMPTS = [
   "I've been feeling anxious lately",
@@ -14,13 +16,10 @@ const STARTER_PROMPTS = [
 ];
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content:
-        "Hi, I'm Anusha, your friendly doctor. Tell me what's on your mind today. I'm here for you.",
-    },
-  ]);
+  const router = useRouter();
+  const [intake, setIntake] = useState<IntakeData | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [mood, setMood] = useState<Mood>('idle');
@@ -33,6 +32,88 @@ export default function Chat() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isThinking]);
+
+  // On mount: load intake from sessionStorage. Redirect to / if missing.
+  // Then send the intake context to /api/chat to get a personalized greeting.
+  useEffect(() => {
+    if (hasInitialized) return;
+
+    const data = loadIntake();
+    if (!data) {
+      router.replace('/');
+      return;
+    }
+    setIntake(data);
+    setHasInitialized(true);
+
+    const feelingDescription: Record<string, string> = {
+      okay: 'feeling okay, just curious',
+      tired: 'feeling tired or run down',
+      anxious: 'feeling anxious or worried',
+      low: 'feeling a bit low',
+      unsure: 'not sure how to describe how they feel',
+    };
+
+    const contextMessage = `Patient intake: My name is ${data.name}. What brings me here today: ${data.concern}. Right now I am ${feelingDescription[data.feeling] ?? 'not feeling great'}. Please greet me warmly by name and acknowledge what I shared, then ask a gentle follow-up question.`;
+
+    // Send the intake context as the first user message — Anusha's reply IS the opening.
+    void (async () => {
+      setIsThinking(true);
+      const detectedMood =
+        data.feeling === 'anxious'
+          ? 'concerned'
+          : data.feeling === 'low' || data.feeling === 'tired'
+            ? 'gentle'
+            : data.feeling === 'okay'
+              ? 'warm'
+              : 'thoughtful';
+      setMood(detectedMood);
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: contextMessage }],
+          }),
+        });
+
+        if (!response.ok || !response.body) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let assistantContent = '';
+        let messageStarted = false;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          assistantContent += chunk;
+
+          if (!messageStarted) {
+            messageStarted = true;
+            setIsThinking(false);
+            setMessages([{ role: 'assistant', content: assistantContent }]);
+          } else {
+            setMessages([{ role: 'assistant', content: assistantContent }]);
+          }
+        }
+      } catch (error) {
+        console.error('Greeting error:', error);
+        setMessages([
+          {
+            role: 'assistant',
+            content: `Hi ${data.name}, I'm Anusha. I'm having a small issue connecting right now, but I'm here. Tell me what's on your mind whenever you're ready.`,
+          },
+        ]);
+        setIsThinking(false);
+      }
+    })();
+  }, [hasInitialized, router]);
 
   const sendMessage = async (textOverride?: string) => {
     const text = (textOverride ?? input).trim();
@@ -52,7 +133,17 @@ export default function Chat() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({
+          messages: intake
+            ? [
+                {
+                  role: 'user',
+                  content: `[Context from intake — do not respond to this directly] My name is ${intake.name}. I came in today because: ${intake.concern}. I'm feeling: ${intake.feeling}.`,
+                },
+                ...newMessages,
+              ]
+            : newMessages,
+        }),
       });
 
       if (!response.ok || !response.body) {
@@ -449,7 +540,17 @@ export default function Chat() {
               fontFamily: 'var(--font-inter), sans-serif',
             }}
           >
-            for emergencies, please call your local emergency services. anusha is here to support, not replace, in-person care.
+            for emergencies, please call your local emergency services. anusha is here to support, not replace, in-person care.{' '}
+            <button
+              onClick={() => {
+                clearIntake();
+                router.push('/');
+              }}
+              className="underline hover:opacity-80 ml-1"
+              style={{ color: '#7a3826' }}
+            >
+              start a new visit
+            </button>
           </p>
         </div>
       </div>

@@ -12,3 +12,11 @@ export type Mood =
   | 'gentle'
   | 'warm'
   | 'thoughtful';
+
+export type FeelingTone = 'okay' | 'tired' | 'anxious' | 'low' | 'unsure';
+
+export type IntakeData = {
+  name: string;
+  concern: string;
+  feeling: FeelingTone;
+};
