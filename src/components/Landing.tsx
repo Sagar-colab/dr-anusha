@@ -57,27 +57,25 @@ export default function Landing() {
 
       <div
         className="relative z-10 mb-12 flex items-center justify-center overflow-hidden"
-        style={{ width: 320, height: 70 }}
+        style={{ width: 360, height: 80 }}
       >
         <svg
-          viewBox="0 0 320 70"
-          width="320"
-          height="70"
+          viewBox="0 0 360 80"
+          width="360"
+          height="80"
           xmlns="http://www.w3.org/2000/svg"
           style={{ overflow: 'hidden' }}
         >
           <defs>
-            {/* Edge fade — softens both sides so peaks don't pop in/out abruptly */}
             <linearGradient id="ecgEdgeFade" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor="white" stopOpacity="0" />
-              <stop offset="15%" stopColor="white" stopOpacity="1" />
-              <stop offset="85%" stopColor="white" stopOpacity="1" />
+              <stop offset="12%" stopColor="white" stopOpacity="1" />
+              <stop offset="88%" stopColor="white" stopOpacity="1" />
               <stop offset="100%" stopColor="white" stopOpacity="0" />
             </linearGradient>
             <mask id="ecgMask">
-              <rect x="0" y="0" width="320" height="70" fill="url(#ecgEdgeFade)" />
+              <rect x="0" y="0" width="360" height="80" fill="url(#ecgEdgeFade)" />
             </mask>
-
             <filter id="ecgGlow" x="-10%" y="-50%" width="120%" height="200%">
               <feGaussianBlur stdDeviation="1.5" result="blur" />
               <feMerge>
@@ -87,61 +85,62 @@ export default function Landing() {
             </filter>
           </defs>
 
-          {/* Faint baseline grid hint */}
+          {/* Faint baseline */}
           <line
             x1="0"
-            y1="35"
-            x2="320"
-            y2="35"
+            y1="40"
+            x2="360"
+            y2="40"
             stroke="var(--color-sage)"
-            strokeOpacity="0.18"
+            strokeOpacity="0.2"
             strokeWidth="1"
           />
 
-          {/* Continuous waveform — long path with repeating heartbeats, scrolls left */}
+          {/* Heartbeat — moves LEFT TO RIGHT.
+              Pattern repeats every 180 units. Each beat:
+              - Long flat baseline (rest period)
+              - Small P wave (atrial bump)
+              - Tiny Q dip
+              - Sharp tall R spike (ventricular contraction)
+              - Sharp S dip
+              - Small T bump (relaxation)
+              - Back to baseline
+              Two copies of the pattern, animation translates +180 to loop seamlessly. */}
           <g mask="url(#ecgMask)">
-            <g style={{ animation: 'ecgScroll 4s linear infinite' }}>
-              {/* Two copies of the same pattern, offset, so it loops seamlessly.
-                  Each "beat" is 80 units wide. The pattern repeats every 80 units.
-                  We render 8 beats (640 units) and animate translation by 80 units.
-                  When the animation resets, the next beat is in the same position. */}
+            <g style={{ animation: 'ecgPulse 1.4s linear infinite' }}>
               <path
-                d="M 0 35
-                   L 10 35 L 14 31 L 18 35
-                   L 24 35 L 30 12 L 36 58 L 40 28 L 46 35
-                   L 60 35 L 64 38 L 68 35
-                   L 80 35
-                   L 90 35 L 94 31 L 98 35
-                   L 104 35 L 110 12 L 116 58 L 120 28 L 126 35
-                   L 140 35 L 144 38 L 148 35
-                   L 160 35
-                   L 170 35 L 174 31 L 178 35
-                   L 184 35 L 190 12 L 196 58 L 200 28 L 206 35
-                   L 220 35 L 224 38 L 228 35
-                   L 240 35
-                   L 250 35 L 254 31 L 258 35
-                   L 264 35 L 270 12 L 276 58 L 280 28 L 286 35
-                   L 300 35 L 304 38 L 308 35
-                   L 320 35
-                   L 330 35 L 334 31 L 338 35
-                   L 344 35 L 350 12 L 356 58 L 360 28 L 366 35
-                   L 380 35 L 384 38 L 388 35
-                   L 400 35
-                   L 410 35 L 414 31 L 418 35
-                   L 424 35 L 430 12 L 436 58 L 440 28 L 446 35
-                   L 460 35 L 464 38 L 468 35
-                   L 480 35
-                   L 490 35 L 494 31 L 498 35
-                   L 504 35 L 510 12 L 516 58 L 520 28 L 526 35
-                   L 540 35 L 544 38 L 548 35
-                   L 560 35
-                   L 570 35 L 574 31 L 578 35
-                   L 584 35 L 590 12 L 596 58 L 600 28 L 606 35
-                   L 620 35 L 624 38 L 628 35
-                   L 640 35"
+                d="M -360 40
+                   L -280 40
+                   L -270 40 L -266 36 L -262 40
+                   L -255 40
+                   L -252 42 L -250 40
+                   L -248 16 L -246 64 L -244 40
+                   L -238 40 L -234 38 L -230 40
+                   L -180 40
+                   L -100 40
+                   L -90 40 L -86 36 L -82 40
+                   L -75 40
+                   L -72 42 L -70 40
+                   L -68 16 L -66 64 L -64 40
+                   L -58 40 L -54 38 L -50 40
+                   L 0 40
+                   L 80 40
+                   L 90 40 L 94 36 L 98 40
+                   L 105 40
+                   L 108 42 L 110 40
+                   L 112 16 L 114 64 L 116 40
+                   L 122 40 L 126 38 L 130 40
+                   L 180 40
+                   L 260 40
+                   L 270 40 L 274 36 L 278 40
+                   L 285 40
+                   L 288 42 L 290 40
+                   L 292 16 L 294 64 L 296 40
+                   L 302 40 L 306 38 L 310 40
+                   L 360 40"
                 fill="none"
                 stroke="var(--color-terracotta)"
-                strokeOpacity="0.85"
+                strokeOpacity="0.9"
                 strokeWidth="1.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"

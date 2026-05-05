@@ -44,9 +44,9 @@ html, body {
   50% { transform: translateY(-6px); opacity: 1; }
 }
 
-@keyframes ecgScroll {
+@keyframes ecgPulse {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-80px); }
+  100% { transform: translateX(180px); }
 }
 
 /* Soft scrollbar */
