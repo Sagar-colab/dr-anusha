@@ -456,7 +456,7 @@ export default function Chat() {
             </div>
           )}
 
-          {messages.length === 1 && !isThinking && (
+          {messages.length === 1 && !isThinking && !intake && (
             <div className="pt-4 flex flex-wrap gap-2 justify-center">
               {STARTER_PROMPTS.map((p) => (
                 <button
