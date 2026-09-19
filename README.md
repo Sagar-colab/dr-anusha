@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dr. Anusha — AI Health Companion
 
-## Getting Started
+A warm, AI-powered health companion chatbot designed to provide general health and wellness guidance through a friendly doctor-inspired persona.
 
-First, run the development server:
+Dr. Anusha is built to create a supportive and approachable conversational experience while maintaining clear safety boundaries around medical information.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The application is designed to **inform and support users without diagnosing medical conditions or prescribing medication**, and encourages users to seek professional medical help when appropriate.
+
+## ✨ Features
+
+- 🤖 AI-powered conversational health companion
+- 💬 Real-time streaming responses
+- 🧠 Keyword-based mood detection
+- 🌿 Mood-aware conversational experience
+- 🫁 Guided 4-7-8 breathing companion for detected distress
+- 🚨 Emergency-situation guidance
+- 🩺 No-diagnosis and no-prescription safeguards
+- 📱 Responsive and modern user interface
+- ⚡ Fast server-side AI integration using Gemini
+- 🔐 Environment-based API key configuration
+- 🎨 Custom typography and calming visual design
+- 🧩 Modular component-based architecture
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Next.js 16, TypeScript
+- **Styling:** Tailwind CSS v4
+- **Fonts:** Fraunces + Inter
+- **AI:** Google Gemini (`gemini-2.5-flash`)
+- **Deployment:** Vercel
+- **Version Control:** GitHub
+
+## 🏗️ Architecture
+
+```text
+src/
+├── app/
+│   ├── page.tsx
+│   └── api/
+│       └── chat/
+│           └── route.ts
+│
+├── components/
+│   ├── Chat.tsx
+│   └── BreathingCompanion.tsx
+│
+├── lib/
+│   ├── mood.ts
+│   └── system-prompt.ts
+│
+└── types/
+    └── chat.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Created by **Sagar U.**
